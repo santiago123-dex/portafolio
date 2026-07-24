@@ -18,6 +18,8 @@ const TYPE_LABELS: Record<string, string> = {
 
 function ProjectCard({ project }: { project: ProjectData }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
+  const lastMoveRef = useRef({ x: 0, y: 0 });
   const [imgState, setImgState] = useState<'loading' | 'loaded' | 'error'>(
     project.image ? 'loading' : 'error',
   );
@@ -25,27 +27,40 @@ function ProjectCard({ project }: { project: ProjectData }) {
   const onImgLoad = useCallback(() => setImgState('loaded'), []);
   const onImgError = useCallback(() => setImgState('error'), []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const applyTilt = useCallback(() => {
     if (!cardRef.current) return;
+    const { x, y } = lastMoveRef.current;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const cx = x - rect.left;
+    const cy = y - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
-
+    const rotateX = ((cy - centerY) / centerY) * -5;
+    const rotateY = ((cx - centerX) / centerX) * 5;
     cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-
     const glare = cardRef.current.querySelector('.card-glare') as HTMLElement;
     if (glare) {
-      const glareX = (x / rect.width) * 100;
-      const glareY = (y / rect.height) * 100;
+      const glareX = (cx / rect.width) * 100;
+      const glareY = (cy / rect.height) * 100;
       glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, color-mix(in srgb, var(--color-primary) 15%, transparent), transparent 60%)`;
+    }
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    lastMoveRef.current = { x: e.clientX, y: e.clientY };
+    if (!rafRef.current) {
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = 0;
+        applyTilt();
+      });
     }
   };
 
   const handleMouseLeave = () => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    }
     if (!cardRef.current) return;
     cardRef.current.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
     const glare = cardRef.current.querySelector('.card-glare') as HTMLElement;
@@ -63,7 +78,7 @@ function ProjectCard({ project }: { project: ProjectData }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="group relative glass rounded-2xl overflow-hidden transition-all duration-200 ease-out cursor-pointer"
-      style={{ transformStyle: 'preserve-3d' }}
+      style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
     >
       <div className="card-glare absolute inset-0 z-10 pointer-events-none transition-all duration-200" />
 

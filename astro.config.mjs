@@ -5,6 +5,9 @@ import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   integrations: [react(), tailwind(), mdx()],
+  build: {
+    inlineStylesheets: 'always',
+  },
   vite: {
     resolve: {
       alias: {
@@ -20,6 +23,10 @@ export default defineConfig({
           },
         },
       },
+      target: 'es2020',
+    },
+    ssr: {
+      noExternal: ['gsap'],
     },
   },
 });
