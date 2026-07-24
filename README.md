@@ -17,17 +17,7 @@ Portafolio personal one-page con experiencias 3D, animaciones al scroll y captur
 
 ## Librerías
 
-### React Three Fiber + Drei + Postprocessing
-R3F es un renderer de React para WebGL que permite escribir escenas 3D con componentes declarativos (un `<mesh>` en vez de `new THREE.Mesh()`). Las escenas corren en un `<Canvas>` que tiene su propio bucle de render (useFrame), completamente independiente del DOM.
-
-Drei es un set de utilidades para R3F: `Float` (flotación sinusoidal), `AdaptiveDpr` (baja resolución si hay lag), `useDetectGPU`, etc.
-
-Postprocessing agrega efectos post-render como Bloom (el glow neón que ves en el hero).
-
-### GSAP + ScrollTrigger
-GSAP es una librería de animaciones basada en timeline que mueve propiedades numéricas (`opacity`, `y`, `rotation`, etc.) con easing interpolado. Es más performante que CSS transitions para animaciones complejas porque opera directamente sobre los valores sin depender del layout del navegador.
-
-ScrollTrigger es un plugin de GSAP que dispara animaciones según la posición del scroll. En lugar de hacer cálculos manuales con `scroll` eventos (que tienen FPS bajo), usa el bucle de RAF de GSAP para mantener sincronización.
+Three.js es el motor que permite crear gráficos 3D en el navegador. React Three Fiber no reemplaza Three.js, sino que permite utilizar Three.js mediante componentes React. Drei es una colección de componentes y utilidades ya construidas para acelerar el desarrollo de escenas 3D con React Three Fiber. Postprocessing agrega efectos visuales como Bloom sobre la escena renderizada. GSAP es una librería especializada en animaciones complejas que permite controlar movimientos, transformaciones y secuencias que serían más difíciles de manejar con CSS. ScrollTrigger es un plugin de GSAP que conecta esas animaciones con el scroll del usuario, permitiendo ejecutar animaciones cuando determinados elementos aparecen en pantalla.
 
 ## Animaciones
 
