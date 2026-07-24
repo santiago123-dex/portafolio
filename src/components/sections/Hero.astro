@@ -1,0 +1,37 @@
+---
+import HeroScene from '@/components/three/HeroScene';
+---
+
+<section id="hero" class="relative w-full h-screen overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-bg/50 via-transparent to-bg z-10 pointer-events-none" />
+
+  <div class="absolute inset-0 z-0">
+    <HeroScene client:visible />
+  </div>
+
+  <div class="relative z-20 h-full flex flex-col items-center justify-center text-center px-6">
+    <p class="text-sm md:text-base text-primary font-mono mb-4 tracking-[0.2em] uppercase">
+      Full-Stack Developer &amp; Creative Technologist
+    </p>
+    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold gradient-text mb-6 leading-tight">
+      Santiago Fajardo
+    </h1>
+    <p class="text-lg md:text-xl text-muted max-w-2xl mb-10 text-balance">
+      Ingeniero de software apasionado por la creación de experiencias digitales innovadoras y funcionales. Me especializo en el desarrollo de aplicaciones web completas, combinando un diseño limpio con una ingeniería sólida.
+    </p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="#projects" class="px-8 py-3 bg-primary text-bg font-medium rounded-full hover:opacity-90 transition-all hover:scale-105">
+        Ver Proyectos
+      </a>
+      <a href="#contact" class="px-8 py-3 border border-border text-text font-medium rounded-full hover:border-primary transition-all hover:bg-primary/10">
+        Contacto
+      </a>
+    </div>
+  </div>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
+      <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+    </svg>
+  </div>
+</section>

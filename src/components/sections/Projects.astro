@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectsGrid from './ProjectsGrid';
+
+const projects = await getCollection('projects', ({ data }) => data.featured);
+projects.sort((a, b) => a.data.order - b.data.order);
+
+const projectData = await Promise.all(
+  projects.map(async (p) => {
+    let image = p.data.image;
+
+    if (!image && p.data.liveUrl) {
+      try {
+        const res = await fetch(
+          `https://api.microlink.io/?url=${encodeURIComponent(p.data.liveUrl)}&screenshot=true&meta=false`,
+        );
+        const json = await res.json();
+        image = json.data?.screenshot?.url;
+      } catch {
+        image = undefined;
+      }
+    }
+
+    return {
+      title: p.data.title,
+      description: p.data.description,
+      tech: p.data.tech,
+      type: p.data.type,
+      image,
+      liveUrl: p.data.liveUrl,
+      repoUrl: p.data.repoUrl,
+    };
+  }),
+);
+---
+
+<section id="projects" class="section-container section-reveal">
+  <div class="max-w-7xl mx-auto w-full">
+    <div class="reveal-child mb-16">
+      <p class="text-sm font-mono text-primary tracking-[0.2em] uppercase mb-4">Proyectos</p>
+      <h2 class="text-4xl md:text-5xl font-bold leading-tight">
+        Trabajo <span class="gradient-text">destacado</span>
+      </h2>
+    </div>
+    <div class="reveal-child">
+      <ProjectsGrid projects={projectData} client:load />
+    </div>
+  </div>
+</section>

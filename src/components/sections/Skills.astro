@@ -1,0 +1,57 @@
+---
+const skillCategories = [
+  {
+    title: 'Frontend',
+    skills: ['React', 'TypeScript', 'Next.js', 'Tailwind', 'Astro', "Angular"],
+    cssVar: 'primary',
+  },
+  {
+    title: 'Backend',
+    skills: ['Node.js', 'Python', 'Java', 'SpringBoot', 'PostgreSQL', "JWT", "Express.js", "SQLITE", "SQL"],
+    cssVar: 'secondary',
+  },
+  {
+    title: 'DevOps',
+    skills: ['Docker', 'Linux', 'Nginx', "Git"],
+    cssVar: 'accent',
+  },
+  {
+    title: 'Design',
+    skills: ['Figma', 'UI/UX', 'Animación'],
+    cssVar: 'primary',
+  },
+];
+---
+
+<section id="skills" class="section-container section-reveal">
+  <div class="max-w-7xl mx-auto w-full">
+    <div class="reveal-child mb-16">
+      <p class="text-sm font-mono text-primary tracking-[0.2em] uppercase mb-4">Skills</p>
+      <h2 class="text-4xl md:text-5xl font-bold leading-tight">
+        Stack <span class="gradient-text">tecnológico</span>
+      </h2>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 reveal-child">
+      {skillCategories.map((cat) => (
+        <div
+          key={cat.title}
+          class="glass rounded-2xl p-6 border hover:scale-[1.02] transition-transform duration-300"
+          style={{
+            borderColor: `color-mix(in srgb, var(--color-${cat.cssVar}) 30%, transparent)`,
+            background: `linear-gradient(to bottom, color-mix(in srgb, var(--color-${cat.cssVar}) 30%, transparent), color-mix(in srgb, var(--color-${cat.cssVar}) 10%, transparent))`,
+          }}
+        >
+          <h3 class="text-lg font-bold mb-4" style={{ color: `var(--color-${cat.cssVar})` }}>{cat.title}</h3>
+          <ul class="space-y-3">
+            {cat.skills.map((skill) => (
+              <li key={skill} class="flex items-center gap-3 text-sm text-muted">
+                <span class="w-1.5 h-1.5 rounded-full bg-current" style={{ color: `var(--color-${cat.cssVar})` }} />
+                {skill}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
