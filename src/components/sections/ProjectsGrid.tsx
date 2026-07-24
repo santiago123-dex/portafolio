@@ -21,8 +21,6 @@ function ProjectCard({ project }: { project: ProjectData }) {
   const [imgState, setImgState] = useState<'loading' | 'loaded' | 'error'>(
     project.image ? 'loading' : 'error',
   );
-  const showPlaceholder = !project.image || imgState === 'error';
-  const showImage = project.image && imgState === 'loaded';
 
   const onImgLoad = useCallback(() => setImgState('loaded'), []);
   const onImgError = useCallback(() => setImgState('error'), []);
@@ -56,6 +54,9 @@ function ProjectCard({ project }: { project: ProjectData }) {
     }
   };
 
+  const hasImage = !!project.image;
+  const isError = imgState === 'error';
+
   return (
     <div
       ref={cardRef}
@@ -67,27 +68,27 @@ function ProjectCard({ project }: { project: ProjectData }) {
       <div className="card-glare absolute inset-0 z-10 pointer-events-none transition-all duration-200" />
 
       <div className="relative h-48 overflow-hidden bg-border/20" style={{ transform: 'translateZ(30px)' }}>
-        {imgState === 'loading' && (
-          <div className="absolute inset-0 shimmer" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 10%, transparent), color-mix(in srgb, var(--color-secondary) 10%, transparent), color-mix(in srgb, var(--color-accent) 10%, transparent))' }} />
+
+        {imgState === 'loading' && hasImage && (
+          <div className="shimmer absolute inset-0 z-[2]" />
         )}
-        {showPlaceholder && (
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 10%, transparent), color-mix(in srgb, var(--color-secondary) 10%, transparent), color-mix(in srgb, var(--color-accent) 10%, transparent))' }} />
-        )}
-        {showImage && (
+
+        {hasImage && (
           <img
             src={project.image}
             alt={project.title}
             loading="lazy"
             onLoad={onImgLoad}
             onError={onImgError}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isError ? 'opacity-0' : 'opacity-100'}`}
           />
         )}
-        {!showImage && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl opacity-20 group-hover:opacity-30 transition-opacity">✦</span>
-          </div>
-        )}
+
+        <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isError || !hasImage ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <span className="text-6xl opacity-20 group-hover:opacity-30 transition-opacity">✦</span>
+        </div>
+
         <div className="absolute top-3 right-3 z-10">
           <span
             className="px-3 py-1 rounded-full text-xs font-mono capitalize"
@@ -152,7 +153,7 @@ function ProjectCard({ project }: { project: ProjectData }) {
 
 export default function ProjectsGrid({ projects }: { projects: ProjectData[] }) {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
       {projects.map((project, index) => (
         <ProjectCard key={index} project={project} />
       ))}
