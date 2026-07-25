@@ -22,7 +22,7 @@ Three.js es el motor que permite crear gráficos 3D en el navegador. React Three
 ## Animaciones
 
 - **Scroll**: nativo + GSAP ScrollTrigger para reveals al entrar al viewport
-- **Hero 3D**: torus knot central con seguimiento de mouse, shapes orbitando con Float, partículas, Bloom
+- **Hero 3D**: superficie de onda con 900 partículas, seguimiento de mouse, Bloom sutil
 - **Contacto 3D**: anillo + partículas, render pausado cuando no está en viewport
 - **Cards**: tilt 3D con glare al hover (RAF-throttled), shimmer con translateX
 
